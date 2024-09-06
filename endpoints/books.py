@@ -3,6 +3,7 @@ from typing import List
 from fastapi import APIRouter
 
 from schemas.books import BookSchema
+from services.book_service import BookService
 
 router = APIRouter(
     prefix="/books",
@@ -15,8 +16,7 @@ router = APIRouter(
             description="This method returns a list of all books",
             )
 async def get_books():
-    books = "Книги"
-    return books
+    return await BookService.find_all_books()
 
 
 @router.post("",

@@ -24,5 +24,5 @@ class Book(Base):
     title = Column(String, nullable=False)
 
     # Связь с авторами и тегами: многие ко многим
-    authors = relationship('Author', secondary=book_author_association, back_populates='book')
-    tags = relationship('Tag', secondary=book_tag_association, back_populates='book')
+    authors = relationship('Author', secondary=book_author_association, back_populates='books')
+    tags = relationship('Tag', secondary=book_tag_association, back_populates='books')

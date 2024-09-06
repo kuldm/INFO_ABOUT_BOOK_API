@@ -3,6 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 
 from schemas.authors import AuthorSchema
+from services.author_service import AuthorService
 
 router = APIRouter(
     prefix="/authors",
@@ -15,8 +16,7 @@ router = APIRouter(
             description="This method returns a list of all authors",
             )
 async def get_authors():
-    authors = "Авторы"
-    return authors
+    return await AuthorService.find_all()
 
 
 @router.post("",

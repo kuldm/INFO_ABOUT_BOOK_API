@@ -3,6 +3,7 @@ from typing import List
 from fastapi import APIRouter
 
 from schemas.tags import TagSchema
+from services.tag_service import TagService
 
 router = APIRouter(
     prefix="/tags",
@@ -15,8 +16,7 @@ router = APIRouter(
             description="This method returns a list of all tags",
             )
 async def get_tags():
-    tags = "Тэги"
-    return tags
+    return await TagService.find_all()
 
 
 @router.post("",

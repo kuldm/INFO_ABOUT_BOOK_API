@@ -13,4 +13,4 @@ class Author(Base):
     name = Column(String, nullable=False)
 
     # Связь с книгами: многие ко многим
-    books = relationship("Book", secondary=book_author_association, back_populates="tags")
+    books = relationship("Book", secondary=book_author_association, back_populates="authors")
