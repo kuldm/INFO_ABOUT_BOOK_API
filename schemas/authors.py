@@ -26,3 +26,4 @@ class AuthorShortSchema(BaseModel):
 
     class Config:
         from_attributes = True
+

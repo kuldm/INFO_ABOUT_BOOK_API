@@ -35,3 +35,5 @@ class BookShortSchema(BaseModel):
 
     class Config:
         from_attributes = True
+
+

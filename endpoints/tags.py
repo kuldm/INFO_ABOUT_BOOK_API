@@ -20,11 +20,13 @@ async def get_tags():
 
 
 @router.post("",
-             response_model=TagSchema,
+             response_model=TagShortSchema,
              description="This method creates a new tag",
              )
-async def create_tag():
-    pass
+async def create_tag(
+        tag: str,
+):
+    return await TagService.add(name=tag)
 
 
 @router.get("/{tag_id}",
@@ -48,5 +50,7 @@ async def update_tag(tag_id):
 @router.delete("/{tag_id}",
                description="This method deletes the tag's by id",
                )
-async def delete_tag(tag_id):
-    pass
+async def delete_tag(
+        tag_id: int,
+):
+    return await TagService.delete(id=tag_id)

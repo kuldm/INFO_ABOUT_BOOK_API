@@ -48,5 +48,7 @@ async def update_book(book_id):
 @router.delete("/{book_id}",
                description="This method deletes the book's by id",
                )
-async def delete_book(book_id):
-    pass
+async def delete_book(
+        book_id: int,
+):
+    return await BookService.delete(id=book_id)

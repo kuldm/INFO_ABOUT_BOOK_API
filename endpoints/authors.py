@@ -20,11 +20,13 @@ async def get_authors():
 
 
 @router.post("",
-             response_model=AuthorSchema,
+             response_model=AuthorShortSchema,
              description="This method creates a new author",
              )
-async def create_author():
-    pass
+async def create_author(
+        author_name: str,
+):
+    return await AuthorService.add(name=author_name)
 
 
 @router.get("/{author_id}",
@@ -35,7 +37,6 @@ async def get_author_by_id(
         author_id: int,
 ):
     return await AuthorService.find_one_or_none(id=author_id)
-
 
 
 @router.put("/{author_id}",
@@ -49,5 +50,7 @@ async def update_author(author_id):
 @router.delete("/{author_id}",
                description="This method deletes the author's by id",
                )
-async def delete_author(author_id):
-    pass
+async def delete_author(
+        author_id: int,
+):
+    return await AuthorService.delete(id=author_id)
