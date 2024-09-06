@@ -2,7 +2,7 @@ from typing import List
 
 from fastapi import APIRouter
 
-from schemas.books import BookSchema
+from schemas.books import BookSchema, BookShortSchema
 from services.book_service import BookService
 
 router = APIRouter(
@@ -28,11 +28,13 @@ async def create_book():
 
 
 @router.get("/{book_id}",
-            response_model=BookSchema,
-            description="This method returns the book's details by id",
+            response_model=BookShortSchema,
+            description="This method returns the book's by id",
             )
-async def get_book(book_id):
-    pass
+async def get_book_by_id(
+        book_id: int,
+):
+    return await BookService.find_one_or_none(id=book_id)
 
 
 @router.put("/{book_id}",

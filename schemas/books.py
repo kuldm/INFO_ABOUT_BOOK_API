@@ -27,3 +27,11 @@ class BookSchema(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class BookShortSchema(BaseModel):
+    id: int
+    title: str
+
+    class Config:
+        from_attributes = True

@@ -2,7 +2,7 @@ from typing import List
 
 from fastapi import APIRouter, Depends
 
-from schemas.authors import AuthorSchema
+from schemas.authors import AuthorSchema, AuthorShortSchema
 from services.author_service import AuthorService
 
 router = APIRouter(
@@ -28,11 +28,14 @@ async def create_author():
 
 
 @router.get("/{author_id}",
-            response_model=AuthorSchema,
-            description="This method returns the author's details by id",
+            response_model=AuthorShortSchema,
+            description="This method returns the author's by id",
             )
-async def get_author(author_id):
-    pass
+async def get_author_by_id(
+        author_id: int,
+):
+    return await AuthorService.find_one_or_none(id=author_id)
+
 
 
 @router.put("/{author_id}",
