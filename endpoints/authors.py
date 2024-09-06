@@ -1,4 +1,8 @@
-from fastapi import APIRouter
+from typing import List
+
+from fastapi import APIRouter, Depends
+
+from schemas.authors import AuthorSchema
 
 router = APIRouter(
     prefix="/authors",
@@ -7,6 +11,7 @@ router = APIRouter(
 
 
 @router.get("",
+            response_model=List[AuthorSchema],
             description="This method returns a list of all authors",
             )
 async def get_authors():
@@ -15,6 +20,7 @@ async def get_authors():
 
 
 @router.post("",
+             response_model=AuthorSchema,
              description="This method creates a new author",
              )
 async def create_author():
@@ -22,6 +28,7 @@ async def create_author():
 
 
 @router.get("/{author_id}",
+            response_model=AuthorSchema,
             description="This method returns the author's details by id",
             )
 async def get_author(author_id):
@@ -29,6 +36,7 @@ async def get_author(author_id):
 
 
 @router.put("/{author_id}",
+            response_model=AuthorSchema,
             description="This method updates the author's details by id",
             )
 async def update_author(author_id):

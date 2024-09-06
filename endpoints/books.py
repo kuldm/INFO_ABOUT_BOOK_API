@@ -2,7 +2,7 @@ from typing import List
 
 from fastapi import APIRouter
 
-from shemas.books import SchemaBook
+from schemas.books import BookSchema
 
 router = APIRouter(
     prefix="/books",
@@ -11,6 +11,7 @@ router = APIRouter(
 
 
 @router.get("",
+            response_model=List[BookSchema],
             description="This method returns a list of all books",
             )
 async def get_books():
@@ -19,6 +20,7 @@ async def get_books():
 
 
 @router.post("",
+             response_model=BookSchema,
              description="This method creates a new book",
              )
 async def create_book():
@@ -26,6 +28,7 @@ async def create_book():
 
 
 @router.get("/{book_id}",
+            response_model=BookSchema,
             description="This method returns the book's details by id",
             )
 async def get_book(book_id):
@@ -33,6 +36,7 @@ async def get_book(book_id):
 
 
 @router.put("/{book_id}",
+            response_model=BookSchema,
             description="This method updates the book's details by id",
             )
 async def update_book(book_id):

@@ -1,4 +1,8 @@
+from typing import List
+
 from fastapi import APIRouter
+
+from schemas.tags import TagSchema
 
 router = APIRouter(
     prefix="/tags",
@@ -7,6 +11,7 @@ router = APIRouter(
 
 
 @router.get("",
+            response_model=List[TagSchema],
             description="This method returns a list of all tags",
             )
 async def get_tags():
@@ -15,6 +20,7 @@ async def get_tags():
 
 
 @router.post("",
+             response_model=TagSchema,
              description="This method creates a new tag",
              )
 async def create_tag():
@@ -22,6 +28,7 @@ async def create_tag():
 
 
 @router.get("/{tag_id}",
+            response_model=TagSchema,
             description="This method returns the tag's details by id",
             )
 async def get_tag(tag_id):
@@ -29,6 +36,7 @@ async def get_tag(tag_id):
 
 
 @router.put("/{tag_id}",
+            response_model=TagSchema,
             description="This method updates the tag's details by id",
             )
 async def update_tag(tag_id):
