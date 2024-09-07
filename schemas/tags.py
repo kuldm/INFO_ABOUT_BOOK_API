@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 class BookShortSсhema(BaseModel):
     id: int
-    title: str
+    name: str
 
     class Config:
         from_attributes = True

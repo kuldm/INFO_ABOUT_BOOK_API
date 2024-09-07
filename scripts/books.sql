@@ -1,4 +1,4 @@
-INSERT INTO books (title)
+INSERT INTO books (name)
 VALUES
     ('Гарри Поттер и философский камень'),
     ('Гарри Поттер и Тайная комната'),

@@ -40,11 +40,14 @@ async def get_tag_by_id(
 
 
 @router.put("/{tag_id}",
-            response_model=TagSchema,
+            response_model=TagShortSchema,
             description="This method updates the tag's details by id",
             )
-async def update_tag(tag_id):
-    pass
+async def update_tag(
+        tag_id: int,
+        name: str,
+):
+    return await TagService.update(id=tag_id, name=name)
 
 
 @router.delete("/{tag_id}",

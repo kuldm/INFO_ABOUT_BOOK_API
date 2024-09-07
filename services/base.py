@@ -1,7 +1,7 @@
 from sqlalchemy.orm import selectinload
 
 from database import async_session_maker
-from sqlalchemy import select, insert, delete
+from sqlalchemy import select, insert, delete, update, func
 
 
 class BaseService:
@@ -52,3 +52,13 @@ class BaseService:
             query = delete(cls.model).filter_by(**filter_by)
             await session.execute(query)
             await session.commit()
+
+    @classmethod
+    async def update(cls, id: int, name: str):
+        async with async_session_maker() as session:
+            query = update(cls.model).where(cls.model.id == id).values(name=name).returning(cls.model.id,
+                                                                                            cls.model.name)
+
+            result = await session.execute(query)
+            await session.commit()
+            return result.mappings().first()

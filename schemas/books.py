@@ -21,7 +21,7 @@ class TagShortSchema(BaseModel):
 
 class BookSchema(BaseModel):
     id: int
-    title: str
+    name: str
     authors: Optional[List[AuthorShortSchema]]
     tags: Optional[List[TagShortSchema]]
 
@@ -31,7 +31,7 @@ class BookSchema(BaseModel):
 
 class BookShortSchema(BaseModel):
     id: int
-    title: str
+    name: str
 
     class Config:
         from_attributes = True

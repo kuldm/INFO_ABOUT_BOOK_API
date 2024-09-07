@@ -29,7 +29,7 @@ def upgrade() -> None:
     op.create_index(op.f('ix_authors_id'), 'authors', ['id'], unique=False)
     op.create_table('books',
                     sa.Column('id', sa.Integer(), nullable=False),
-                    sa.Column('title', sa.String(), nullable=False),
+                    sa.Column('name', sa.String(), nullable=False),
                     sa.PrimaryKeyConstraint('id')
                     )
     op.create_index(op.f('ix_books_id'), 'books', ['id'], unique=False)

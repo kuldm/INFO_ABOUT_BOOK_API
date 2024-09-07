@@ -38,11 +38,14 @@ async def get_book_by_id(
 
 
 @router.put("/{book_id}",
-            response_model=BookSchema,
+            response_model=BookShortSchema,
             description="This method updates the book's details by id",
             )
-async def update_book(book_id):
-    pass
+async def update_book(
+        book_id: int,
+        book_name: str
+):
+    return await BookService.update(id=book_id, name=book_name)
 
 
 @router.delete("/{book_id}",

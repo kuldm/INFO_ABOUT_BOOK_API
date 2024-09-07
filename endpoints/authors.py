@@ -40,11 +40,14 @@ async def get_author_by_id(
 
 
 @router.put("/{author_id}",
-            response_model=AuthorSchema,
+            response_model=AuthorShortSchema,
             description="This method updates the author's details by id",
             )
-async def update_author(author_id):
-    pass
+async def update_author(
+        author_id: int,
+        author_name: str,
+                        ):
+    return await AuthorService.update(id=author_id, name=author_name)
 
 
 @router.delete("/{author_id}",
