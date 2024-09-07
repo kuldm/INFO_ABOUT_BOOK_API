@@ -3,6 +3,11 @@ from sqlalchemy.orm import selectinload
 from database import async_session_maker
 from sqlalchemy import select, insert, delete, update, func
 
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.dialects.postgresql.asyncpg import AsyncAdapt_asyncpg_dbapi
+
+from exceptions import LinkM2MException
+
 
 class BaseService:
     model = None
@@ -42,6 +47,13 @@ class BaseService:
     @classmethod
     async def delete(cls, **filter_by):
         async with async_session_maker() as session:
-            query = delete(cls.model).filter_by(**filter_by)
-            await session.execute(query)
-            await session.commit()
+            try:
+                query = delete(cls.model).filter_by(**filter_by)
+                await session.execute(query)
+                await session.commit()
+            except IntegrityError as e:
+                # Проверяем, является ли ошибка нарушением ограничения внешнего ключа
+                if isinstance(e.orig, AsyncAdapt_asyncpg_dbapi.IntegrityError) and 'ForeignKeyViolationError' in str(
+                        e.orig):
+                    raise LinkM2MException
+        return {"Запись успешно удалена"}

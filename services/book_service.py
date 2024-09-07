@@ -5,6 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
 from database import async_session_maker
+from exceptions import BookAbsentException, BookAlreadyExistException, AuthorsMissingException, TagsMissingException
 from models.authors import Author
 from models.books import Book
 from models.tags import Tag
@@ -32,10 +33,16 @@ class BookService(BaseService):
     async def add_book(cls, name: str, authors: List[str], tags: List[str]):
         async with async_session_maker() as session:
 
+            # Проверка на наличие авторов и тегов
+            if not authors:
+                raise AuthorsMissingException
+            if not tags:
+                raise TagsMissingException
+
             # Проверка существования книги
             existing_book = await session.execute(select(cls.model).where(cls.model.name == name))
             if existing_book.scalar():
-                raise HTTPException(status_code=400, detail='Book already exists')
+                raise BookAlreadyExistException
 
             # Проверка авторов: если нет, то создать
             author_objects = []
@@ -76,11 +83,11 @@ class BookService(BaseService):
             book = await session.execute(select(Book).where(Book.id == book_id))
             book = book.scalar()
             if not book:
-                raise HTTPException(status_code=400, detail='Book not found')
+                raise BookAbsentException
 
             existing_book = await session.execute(select(Book).where(Book.name == name, Book.id != book_id))
             if existing_book.scalar():
-                raise HTTPException(status_code=400, detail='Book already exists')
+                raise BookAlreadyExistException
             book.name = name
 
             await session.commit()
@@ -96,9 +103,19 @@ class BookService(BaseService):
             book = book.scalar()
 
             if not book:
-                raise HTTPException(status_code=400, detail='Book not found')
+                raise BookAbsentException
 
             await session.delete(book)
             await session.commit()
 
-            return {"Book deleted successfully"}
+            return {"Книга успешно удалена"}
+
+
+    @classmethod
+    async def find_one_or_none(cls, id: int):
+        async with async_session_maker() as session:
+            # Проверка существования книги по имени
+            existing_book_id = await session.execute(select(cls.model).where(cls.model.id == id))
+            if not existing_book_id.scalar():
+                raise BookAbsentException
+        return await super().find_one_or_none(id=id)
