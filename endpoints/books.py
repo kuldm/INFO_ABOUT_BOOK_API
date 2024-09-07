@@ -20,11 +20,15 @@ async def get_books():
 
 
 @router.post("",
-             response_model=BookSchema,
+             response_model=BookShortSchema,
              description="This method creates a new book",
              )
-async def create_book():
-    pass
+async def create_book(
+        name: str,
+        authors: List[str],
+        tags: List[str],
+):
+    return await BookService.add_book(name=name, authors=authors, tags=tags)
 
 
 @router.get("/{book_id}",
@@ -43,9 +47,9 @@ async def get_book_by_id(
             )
 async def update_book(
         book_id: int,
-        book_name: str
+        book_name: str,
 ):
-    return await BookService.update(id=book_id, name=book_name)
+    return await BookService.update_book(book_id=book_id, name=book_name)
 
 
 @router.delete("/{book_id}",
@@ -54,4 +58,4 @@ async def update_book(
 async def delete_book(
         book_id: int,
 ):
-    return await BookService.delete(id=book_id)
+    return await BookService.delete_book(book_id=book_id)

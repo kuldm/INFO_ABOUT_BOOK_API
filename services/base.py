@@ -15,17 +15,6 @@ class BaseService:
             return result.scalars().all()
 
     @classmethod
-    async def find_all_books(cls, load_options=None, **filter_by):
-        async with async_session_maker() as session:
-            query = select(cls.model).filter_by(**filter_by)
-            if load_options:
-                # Применяем переданные опции для жадной загрузки, если они есть
-                for option in load_options:
-                    query = query.options(option)
-            result = await session.execute(query)
-            return result.scalars().all()
-
-    @classmethod
     async def find_one_or_none(cls, **filter_by):
         async with async_session_maker() as session:
             query = select(cls.model.__table__.columns).filter_by(**filter_by)
@@ -41,19 +30,6 @@ class BaseService:
             return result.mappings().first()
 
     @classmethod
-    async def add_book(cls, title: str, author: str, tag: str):
-        async with async_session_maker() as session:
-            query = insert(cls.model).values(title).returning(cls.model.id, cls.model.name)
-            query2 = insert()
-
-    @classmethod
-    async def delete(cls, **filter_by):
-        async with async_session_maker() as session:
-            query = delete(cls.model).filter_by(**filter_by)
-            await session.execute(query)
-            await session.commit()
-
-    @classmethod
     async def update(cls, id: int, name: str):
         async with async_session_maker() as session:
             query = update(cls.model).where(cls.model.id == id).values(name=name).returning(cls.model.id,
@@ -62,3 +38,10 @@ class BaseService:
             result = await session.execute(query)
             await session.commit()
             return result.mappings().first()
+
+    @classmethod
+    async def delete(cls, **filter_by):
+        async with async_session_maker() as session:
+            query = delete(cls.model).filter_by(**filter_by)
+            await session.execute(query)
+            await session.commit()
