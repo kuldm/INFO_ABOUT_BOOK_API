@@ -43,7 +43,7 @@ async def create_book(
 
 
 @router.get("/{book_id}",
-            response_model=BookShortSchema,
+            response_model=BookSchema,
             description="This method returns the book's by id",
             )
 async def get_book_by_id(
@@ -52,7 +52,7 @@ async def get_book_by_id(
         session: AsyncSession = Depends(get_db),
 
 ):
-    return await BookService.find_one_or_none(session, id=book_id)
+    return await BookService.find_one_or_none_book(session, id=book_id)
 
 
 @router.put("/{book_id}",

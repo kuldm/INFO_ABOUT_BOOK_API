@@ -113,9 +113,15 @@ class BookService(BaseService):
         return {"Книга успешно удалена"}
 
     @classmethod
-    async def find_one_or_none(cls, session: AsyncSession, id: int):
+    async def find_one_or_none_book(cls, session: AsyncSession, id: int):
+        load_options = [selectinload(cls.model.authors), selectinload(cls.model.tags)]
         # Проверка существования книги по имени
         existing_book_id = await session.execute(select(cls.model).where(cls.model.id == id))
         if not existing_book_id.scalar():
             raise BookAbsentException
-        return await super().find_one_or_none(session, id=id)
+        query = select(cls.model).filter(cls.model.id == id)
+        if load_options:
+            for option in load_options:
+                query = query.options(option)
+        result = await session.execute(query)
+        return result.scalars().first()
