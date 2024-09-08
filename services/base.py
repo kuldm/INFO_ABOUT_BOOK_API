@@ -57,3 +57,11 @@ class BaseService:
                         e.orig):
                     raise LinkM2MException
         return {"Запись успешно удалена"}
+
+
+    # @classmethod
+    # async def add(cls, **data):
+    #     async with async_session_maker() as session:
+    #         query = insert(cls.model).values(**data)#.returning(cls.model.id, cls.model.name)
+    #         await session.execute(query)
+    #         await session.commit()

@@ -1,9 +1,10 @@
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from schemas.books import BookSchema, BookShortSchema
 from services.book_service import BookService
+from users.dependencies import get_current_user
 
 router = APIRouter(
     prefix="/books",
@@ -15,7 +16,10 @@ router = APIRouter(
             response_model=List[BookSchema],
             description="This method returns a list of all books",
             )
-async def get_books():
+async def get_books(
+        auth: bool = Depends(get_current_user),
+
+):
     return await BookService.find_all_books()
 
 
@@ -27,6 +31,8 @@ async def create_book(
         name: str,
         authors: List[str],
         tags: List[str],
+        auth: bool = Depends(get_current_user),
+
 ):
     return await BookService.add_book(name=name, authors=authors, tags=tags)
 
@@ -37,6 +43,8 @@ async def create_book(
             )
 async def get_book_by_id(
         book_id: int,
+        auth: bool = Depends(get_current_user),
+
 ):
     return await BookService.find_one_or_none(id=book_id)
 
@@ -48,6 +56,8 @@ async def get_book_by_id(
 async def update_book(
         book_id: int,
         book_name: str,
+        auth: bool = Depends(get_current_user),
+
 ):
     return await BookService.update_book(book_id=book_id, name=book_name)
 
@@ -57,5 +67,7 @@ async def update_book(
                )
 async def delete_book(
         book_id: int,
+        auth: bool = Depends(get_current_user),
+
 ):
     return await BookService.delete_book(book_id=book_id)

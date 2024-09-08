@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends
 
 from schemas.authors import AuthorSchema, AuthorShortSchema
 from services.author_service import AuthorService
+from users.dependencies import get_current_user
 
 router = APIRouter(
     prefix="/authors",
@@ -15,7 +16,10 @@ router = APIRouter(
             response_model=List[AuthorSchema],
             description="This method returns a list of all authors",
             )
-async def get_authors():
+async def get_authors(
+        auth: bool = Depends(get_current_user),
+
+):
     return await AuthorService.find_all()
 
 
@@ -25,6 +29,8 @@ async def get_authors():
              )
 async def create_author(
         author_name: str,
+        auth: bool = Depends(get_current_user),
+
 ):
     return await AuthorService.add(name=author_name)
 
@@ -35,6 +41,8 @@ async def create_author(
             )
 async def get_author_by_id(
         author_id: int,
+        auth: bool = Depends(get_current_user),
+
 ):
     return await AuthorService.find_one_or_none(id=author_id)
 
@@ -46,7 +54,9 @@ async def get_author_by_id(
 async def update_author(
         author_id: int,
         author_name: str,
-                        ):
+        auth: bool = Depends(get_current_user),
+
+):
     return await AuthorService.update(id=author_id, name=author_name)
 
 
@@ -55,5 +65,7 @@ async def update_author(
                )
 async def delete_author(
         author_id: int,
+        auth: bool = Depends(get_current_user),
+
 ):
     return await AuthorService.delete(id=author_id)

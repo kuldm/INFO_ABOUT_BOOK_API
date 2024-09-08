@@ -1,9 +1,11 @@
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
+from models.users import Users
 from schemas.tags import TagSchema, TagShortSchema
 from services.tag_service import TagService
+from users.dependencies import get_current_user
 
 router = APIRouter(
     prefix="/tags",
@@ -15,7 +17,9 @@ router = APIRouter(
             response_model=List[TagSchema],
             description="This method returns a list of all tags",
             )
-async def get_tags():
+async def get_tags(
+        auth: bool = Depends(get_current_user),
+):
     return await TagService.find_all()
 
 
@@ -25,6 +29,7 @@ async def get_tags():
              )
 async def create_tag(
         tag: str,
+        auth: bool = Depends(get_current_user),
 ):
     return await TagService.add(name=tag)
 
@@ -35,6 +40,7 @@ async def create_tag(
             )
 async def get_tag_by_id(
         tag_id: int,
+        auth: bool = Depends(get_current_user),
 ):
     return await TagService.find_one_or_none(id=tag_id)
 
@@ -46,6 +52,8 @@ async def get_tag_by_id(
 async def update_tag(
         tag_id: int,
         name: str,
+        auth: bool = Depends(get_current_user),
+
 ):
     return await TagService.update(id=tag_id, name=name)
 
@@ -55,5 +63,7 @@ async def update_tag(
                )
 async def delete_tag(
         tag_id: int,
+        auth: bool = Depends(get_current_user),
+
 ):
     return await TagService.delete(id=tag_id)

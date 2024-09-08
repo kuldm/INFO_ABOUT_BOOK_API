@@ -10,6 +10,7 @@ from config import settings
 from models.books import Book
 from models.authors import Author
 from models.tags import Tag
+from models.users import Users
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
