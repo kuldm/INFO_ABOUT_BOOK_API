@@ -1,16 +1,15 @@
 from typing import List, Optional
-
-from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from database import async_session_maker
-from exceptions import BookAbsentException, BookAlreadyExistException, AuthorsMissingException, TagsMissingException
+from exceptions import BookAbsentException, BookAlreadyExistException, AuthorsMissingException, TagsMissingException, \
+    AuthorAbsentException, TagAbsentException
 from models.authors import Author
 from models.books import Book
 from models.tags import Tag
 from services.base import BaseService
+from logger_config import logger
 
 
 class BookService(BaseService):
@@ -40,13 +39,16 @@ class BookService(BaseService):
     async def add_book(cls, session: AsyncSession, name: str, authors: List[str], tags: List[str]):
         # Проверка на наличие авторов и тегов
         if not authors:
+            logger.error("No authors provided for the book")
             raise AuthorsMissingException
         if not tags:
+            logger.error("No tags provided for the book")
             raise TagsMissingException
 
         # Проверка существования книги
         existing_book = await session.execute(select(cls.model).where(cls.model.name == name))
         if existing_book.scalar():
+            logger.warning(f"Book with name: '{name}' already exists")
             raise BookAlreadyExistException
 
         # Проверка авторов: если нет, то создать
@@ -55,8 +57,8 @@ class BookService(BaseService):
             existing_author = await session.execute(select(Author).where(Author.name == author_name))
             author = existing_author.scalar()
             if not author:
-                author = Author(name=author_name)
-                session.add(author)
+                logger.error(f"Author '{author_name}' does not exist in the database")
+                raise AuthorAbsentException
             author_objects.append(author)
 
         # Проверка теговЖ если нет то создать
@@ -65,8 +67,8 @@ class BookService(BaseService):
             existing_tags = await session.execute(select(Tag).where(Tag.name == tag_name))
             tag = existing_tags.scalar()
             if not tag:
-                tag = Tag(name=tag_name)
-                session.add(tag)
+                logger.error(f"Tag '{tag_name}' does not exist in the database")
+                raise TagAbsentException
             tags_objects.append(tag)
 
         # Создание книги
@@ -86,10 +88,12 @@ class BookService(BaseService):
         book = await session.execute(select(Book).where(Book.id == book_id))
         book = book.scalar()
         if not book:
+            logger.warning(f"Book with ID: {book_id} not found")
             raise BookAbsentException
 
         existing_book = await session.execute(select(Book).where(Book.name == name, Book.id != book_id))
         if existing_book.scalar():
+            logger.warning(f"Book with name: '{name}' already exists")
             raise BookAlreadyExistException
         book.name = name
 
@@ -105,6 +109,7 @@ class BookService(BaseService):
         book = book.scalar()
 
         if not book:
+            logger.warning(f"Book with ID {book_id} not found")
             raise BookAbsentException
 
         await session.delete(book)
@@ -118,6 +123,7 @@ class BookService(BaseService):
         # Проверка существования книги по имени
         existing_book_id = await session.execute(select(cls.model).where(cls.model.id == id))
         if not existing_book_id.scalar():
+            logger.warning(f"Book with ID: {id} not found")
             raise BookAbsentException
         query = select(cls.model).filter(cls.model.id == id)
         if load_options:

@@ -81,3 +81,23 @@ class IncorrectTokenFormatException(BookApiException):
 
 class UserIsNotPresentException(BookApiException):
     status_code = status.HTTP_401_UNAUTHORIZED
+
+
+class OkStatusCode(BookApiException):
+    status_code = status.HTTP_200_OK
+    detail = "Запись удалена"
+
+
+class UserSuccessfullyRegisteredCode(BookApiException):
+    status_code = status.HTTP_200_OK
+    detail = "Пользователь успешно зарегистрирован"
+
+
+class UserLoggedOutCode(BookApiException):
+    status_code = status.HTTP_200_OK
+    detail = "Вы вышли из системы"
+
+
+class SuccessfulLoggingCode(BookApiException):
+    status_code = status.HTTP_200_OK
+    detail = "Вы вошли в систему"

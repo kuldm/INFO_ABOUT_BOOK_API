@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 from http.client import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-
 from jose import jwt
 from passlib.context import CryptContext
 
@@ -30,8 +29,8 @@ def create_access_token(data: dict) -> str:
     return encoded_jwt
 
 
-async def authenticate_user(name: str, password: str):
-    user = await UserService.find_user(name=name)
+async def authenticate_user(username: str, password: str):
+    user = await UserService.find_user(username=username)
     if not user and not verify_password(password, user.password):
         return None
     return user

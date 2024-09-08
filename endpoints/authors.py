@@ -4,9 +4,11 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database import get_db
+from exceptions import OkStatusCode
 from schemas.authors import AuthorSchema, AuthorShortSchema
 from services.author_service import AuthorService
 from users.dependencies import get_current_user
+from logger_config import logger
 
 router = APIRouter(
     prefix="/authors",
@@ -22,7 +24,10 @@ async def get_authors(
         auth: bool = Depends(get_current_user),
         session: AsyncSession = Depends(get_db),
 ):
-    return await AuthorService.find_all(session)
+    logger.info("Fetching all authors")
+    authors = await AuthorService.find_all(session)
+    logger.info(f"Found {len(authors)} authors")
+    return authors
 
 
 @router.post("",
@@ -35,7 +40,10 @@ async def create_author(
         session: AsyncSession = Depends(get_db),
 
 ):
-    return await AuthorService.add(session, name=author_name)
+    logger.info(f"Creating new author: {author_name}")
+    new_author = await AuthorService.add(session, name=author_name)
+    logger.info(f"Author: {author_name} created successfully with ID: {new_author.id}")
+    return new_author
 
 
 @router.get("/{author_id}",
@@ -48,7 +56,10 @@ async def get_author_by_id(
         session: AsyncSession = Depends(get_db),
 
 ):
-    return await AuthorService.find_one_or_none(session, id=author_id)
+    logger.info(f"Fetching author by ID: {author_id}")
+    author = await AuthorService.find_one_or_none(session, id=author_id)
+    logger.info(f"Author found: {author.name}")
+    return author
 
 
 @router.put("/{author_id}",
@@ -62,7 +73,10 @@ async def update_author(
         session: AsyncSession = Depends(get_db),
 
 ):
-    return await AuthorService.update(session, id=author_id, name=author_name)
+    logger.info(f"Updating author ID: {author_id} with new name: {author_name}")
+    updated_author = await AuthorService.update(session, id=author_id, name=author_name)
+    logger.info(f"Author ID: {author_id} updated successfully")
+    return updated_author
 
 
 @router.delete("/{author_id}",
@@ -74,4 +88,8 @@ async def delete_author(
         session: AsyncSession = Depends(get_db),
 
 ):
-    return await AuthorService.delete(session, id=author_id)
+    logger.info(f"Deleting author with ID: {author_id}")
+    await AuthorService.delete(session, id=author_id)
+    logger.info(f"Author ID: {author_id} deleted successfully")
+    return OkStatusCode().detail
+

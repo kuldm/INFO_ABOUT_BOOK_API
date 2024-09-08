@@ -4,10 +4,12 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database import get_db
+from exceptions import OkStatusCode
 from models.users import Users
 from schemas.tags import TagSchema, TagShortSchema
 from services.tag_service import TagService
 from users.dependencies import get_current_user
+from logger_config import logger
 
 router = APIRouter(
     prefix="/tags",
@@ -23,7 +25,10 @@ async def get_tags(
         auth: bool = Depends(get_current_user),
         session: AsyncSession = Depends(get_db),
 ):
-    return await TagService.find_all(session)
+    logger.info("Fetching all tags")
+    tags = await TagService.find_all(session)
+    logger.info(f"Found {len(tags)} tags")
+    return tags
 
 
 @router.post("",
@@ -35,7 +40,10 @@ async def create_tag(
         auth: bool = Depends(get_current_user),
         session: AsyncSession = Depends(get_db),
 ):
-    return await TagService.add(session, name=tag)
+    logger.info(f"Creating new tag: {tag}")
+    new_tag = await TagService.add(session, name=tag)
+    logger.info(f"Tag: {tag} created successfully with ID {new_tag.id}")
+    return new_tag
 
 
 @router.get("/{tag_id}",
@@ -47,7 +55,10 @@ async def get_tag_by_id(
         auth: bool = Depends(get_current_user),
         session: AsyncSession = Depends(get_db),
 ):
-    return await TagService.find_one_or_none(session, id=tag_id)
+    logger.info(f"Fetching tag by ID: {tag_id}")
+    tag = await TagService.find_one_or_none(session, id=tag_id)
+    logger.info(f"Tag found: {tag.name}")
+    return tag
 
 
 @router.put("/{tag_id}",
@@ -60,7 +71,10 @@ async def update_tag(
         auth: bool = Depends(get_current_user),
         session: AsyncSession = Depends(get_db),
 ):
-    return await TagService.update(session, id=tag_id, name=name)
+    logger.info(f"Updating tag ID: {tag_id} with new name: {name}")
+    updated_tag = await TagService.update(session, id=tag_id, name=name)
+    logger.info(f"Tag ID: {tag_id} updated successfully")
+    return updated_tag
 
 
 @router.delete("/{tag_id}",
@@ -71,4 +85,7 @@ async def delete_tag(
         auth: bool = Depends(get_current_user),
         session: AsyncSession = Depends(get_db),
 ):
-    return await TagService.delete(session, id=tag_id)
+    logger.info(f"Deleting tag with ID: {tag_id}")
+    await TagService.delete(session, id=tag_id)
+    logger.info(f"Tag ID: {tag_id} deleted successfully")
+    return OkStatusCode().detail

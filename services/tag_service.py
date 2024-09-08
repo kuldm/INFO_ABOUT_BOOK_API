@@ -5,6 +5,7 @@ from database import async_session_maker
 from exceptions import TagAlreadyExistException, TagAbsentException
 from models.tags import Tag
 from services.base import BaseService
+from logger_config import logger
 
 
 class TagService(BaseService):
@@ -26,6 +27,7 @@ class TagService(BaseService):
     async def add(cls, session: AsyncSession, name: str):
         # Проверка существования тэга по имени
         if await cls.existing_tag_name(session, name):
+            logger.warning(f"Tag with name '{name}' already exists")
             raise TagAlreadyExistException
         return await super().add(session, name=name)
 
@@ -33,19 +35,23 @@ class TagService(BaseService):
     async def update(cls, session: AsyncSession, id: int, name: str):
         # Проверка существования тэга по id
         if not await cls.existing_tag_id(session, id):
+            logger.warning(f"Tag with ID: {id} not found")
             raise TagAbsentException
         if await cls.existing_tag_name(session, name):
+            logger.warning(f"Tag with name: '{name}' already exists")
             raise TagAlreadyExistException
         return await super().update(session, id=id, name=name)
 
     @classmethod
     async def find_one_or_none(cls, session: AsyncSession, id: int):
         if not await cls.existing_tag_id(session, id):
+            logger.warning(f"Tag with ID: {id} not found")
             raise TagAbsentException
         return await super().find_one_or_none(session, id=id)
 
     @classmethod
     async def delete(cls, session: AsyncSession, id: int):
         if not await cls.existing_tag_id(session, id):
+            logger.warning(f"Tag with ID: {id} not found")
             raise TagAbsentException
         return await super().delete(session, id=id)
