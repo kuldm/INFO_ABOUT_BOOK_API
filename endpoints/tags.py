@@ -45,8 +45,9 @@ async def create_tag(
 async def get_tag_by_id(
         tag_id: int,
         auth: bool = Depends(get_current_user),
+        session: AsyncSession = Depends(get_db),
 ):
-    return await TagService.find_one_or_none(id=tag_id)
+    return await TagService.find_one_or_none(session, id=tag_id)
 
 
 @router.put("/{tag_id}",
@@ -57,9 +58,9 @@ async def update_tag(
         tag_id: int,
         name: str,
         auth: bool = Depends(get_current_user),
-
+        session: AsyncSession = Depends(get_db),
 ):
-    return await TagService.update(id=tag_id, name=name)
+    return await TagService.update(session, id=tag_id, name=name)
 
 
 @router.delete("/{tag_id}",
@@ -68,6 +69,6 @@ async def update_tag(
 async def delete_tag(
         tag_id: int,
         auth: bool = Depends(get_current_user),
-
+        session: AsyncSession = Depends(get_db),
 ):
-    return await TagService.delete(id=tag_id)
+    return await TagService.delete(session, id=tag_id)
