@@ -14,7 +14,9 @@ router = APIRouter(
 )
 
 
-@router.post("/register")
+@router.post("/register",
+             description="This method registers a new user"
+             )
 async def register_user(user_data: UserAuthSchema):
     existing_user = await UserService.find_one_or_none(name=user_data.name)
     if existing_user:
@@ -23,7 +25,9 @@ async def register_user(user_data: UserAuthSchema):
     await UserService.add(name=user_data.name, hashed_password=hashed_password)
 
 
-@router.post("/login")
+@router.post("/login",
+             description="This method logining the user's",
+             )
 async def login_user(response: Response, user_data: UserAuthSchema):
     user = await authenticate_user(user_data.name, user_data.password)
     if not user:
@@ -33,6 +37,17 @@ async def login_user(response: Response, user_data: UserAuthSchema):
     return {"access_token": access_token}
 
 
-@router.post("/logout")
+@router.post("/logout",
+             description="This method logs out the user's"
+             )
 async def logout_user(response: Response):
     response.delete_cookie("user_access_token")
+
+
+@router.delete("/{user_name}",
+               description="This method deletes the user's by name",
+               )
+async def delete_tag(
+        name: str,
+):
+    return await UserService.delete(name=name)
