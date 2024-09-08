@@ -1,6 +1,6 @@
-from typing import List
+from typing import List, Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database import get_db
@@ -21,9 +21,10 @@ router = APIRouter(
 async def get_books(
         auth: bool = Depends(get_current_user),
         session: AsyncSession = Depends(get_db),
-
+        author_id: Optional[int] = Query(None),
+        tag_id: Optional[int] = None,
 ):
-    return await BookService.find_all_books(session)
+    return await BookService.find_all_books(session, author_id, tag_id)
 
 
 @router.post("",

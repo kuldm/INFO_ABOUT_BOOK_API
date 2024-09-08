@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from fastapi import HTTPException
 from sqlalchemy import select
@@ -17,10 +17,17 @@ class BookService(BaseService):
     model = Book
 
     @classmethod
-    async def find_all_books(cls, session: AsyncSession):
+    async def find_all_books(cls, session: AsyncSession, author_id: Optional[int] = None, tag_id: Optional[int] = None):
         load_options = [selectinload(cls.model.authors), selectinload(cls.model.tags)]
         # Формируем запрос
         query = select(cls.model)
+        # Если author_id передан, фильтруем книги по автору
+        if author_id:
+            query = query.where(cls.model.authors).where(Author.id == author_id)
+        # Если tag_id передан, фильтруем книги по тегу
+        if tag_id:
+            query = query.where(cls.model.tags).where(Tag.id == tag_id)
+
         if load_options:
             for option in load_options:
                 query = query.options(option)
