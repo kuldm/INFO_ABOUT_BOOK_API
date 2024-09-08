@@ -32,7 +32,7 @@ async def get_current_user(token: str = Depends(get_token)):
     if not user_id:
         raise UserIsNotPresentException
 
-    user = await UserService.find_one_or_none(id=int(user_id))
+    user = await UserService.find_user(id=int(user_id))
     if not user:
         raise UserIsNotPresentException
 

@@ -1,7 +1,9 @@
 from typing import List
 
 from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from database import get_db
 from schemas.authors import AuthorSchema, AuthorShortSchema
 from services.author_service import AuthorService
 from users.dependencies import get_current_user
@@ -18,9 +20,9 @@ router = APIRouter(
             )
 async def get_authors(
         auth: bool = Depends(get_current_user),
-
+        session: AsyncSession = Depends(get_db),
 ):
-    return await AuthorService.find_all()
+    return await AuthorService.find_all(session)
 
 
 @router.post("",
@@ -30,9 +32,10 @@ async def get_authors(
 async def create_author(
         author_name: str,
         auth: bool = Depends(get_current_user),
+        session: AsyncSession = Depends(get_db),
 
 ):
-    return await AuthorService.add(name=author_name)
+    return await AuthorService.add(session, name=author_name)
 
 
 @router.get("/{author_id}",
@@ -42,9 +45,10 @@ async def create_author(
 async def get_author_by_id(
         author_id: int,
         auth: bool = Depends(get_current_user),
+        session: AsyncSession = Depends(get_db),
 
 ):
-    return await AuthorService.find_one_or_none(id=author_id)
+    return await AuthorService.find_one_or_none(session, id=author_id)
 
 
 @router.put("/{author_id}",
@@ -55,9 +59,10 @@ async def update_author(
         author_id: int,
         author_name: str,
         auth: bool = Depends(get_current_user),
+        session: AsyncSession = Depends(get_db),
 
 ):
-    return await AuthorService.update(id=author_id, name=author_name)
+    return await AuthorService.update(session, id=author_id, name=author_name)
 
 
 @router.delete("/{author_id}",
@@ -66,6 +71,7 @@ async def update_author(
 async def delete_author(
         author_id: int,
         auth: bool = Depends(get_current_user),
+        session: AsyncSession = Depends(get_db),
 
 ):
-    return await AuthorService.delete(id=author_id)
+    return await AuthorService.delete(session, id=author_id)

@@ -1,7 +1,9 @@
 from typing import List
 
 from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from database import get_db
 from models.users import Users
 from schemas.tags import TagSchema, TagShortSchema
 from services.tag_service import TagService
@@ -19,8 +21,9 @@ router = APIRouter(
             )
 async def get_tags(
         auth: bool = Depends(get_current_user),
+        session: AsyncSession = Depends(get_db),
 ):
-    return await TagService.find_all()
+    return await TagService.find_all(session)
 
 
 @router.post("",
@@ -30,8 +33,9 @@ async def get_tags(
 async def create_tag(
         tag: str,
         auth: bool = Depends(get_current_user),
+        session: AsyncSession = Depends(get_db),
 ):
-    return await TagService.add(name=tag)
+    return await TagService.add(session, name=tag)
 
 
 @router.get("/{tag_id}",

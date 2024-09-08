@@ -1,8 +1,10 @@
 from http.client import HTTPException
 
-from fastapi import APIRouter, Response
+from fastapi import APIRouter, Response, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.testing.pickleable import User
 
+from database import get_db
 from exceptions import UserIsNotPresentException, UserAlreadyExistException
 from schemas.users import UserAuthSchema
 from services.user_service import UserService
@@ -18,11 +20,11 @@ router = APIRouter(
              description="This method registers a new user"
              )
 async def register_user(user_data: UserAuthSchema):
-    existing_user = await UserService.find_one_or_none(name=user_data.name)
+    existing_user = await UserService.find_user(name=user_data.name)
     if existing_user:
         raise UserAlreadyExistException
     hashed_password = get_password_hash(user_data.password)
-    await UserService.add(name=user_data.name, hashed_password=hashed_password)
+    await UserService.add_user(name=user_data.name, hashed_password=hashed_password)
 
 
 @router.post("/login",
@@ -50,4 +52,4 @@ async def logout_user(response: Response):
 async def delete_tag(
         name: str,
 ):
-    return await UserService.delete(name=name)
+    return await UserService.delete_user(name=name)
