@@ -1,0 +1,10 @@
+[
+    {
+        "username": "test",
+        "hashed_password": "$2b$12$hXsPiSHh/Cle.zNeS/btr.XNhzx4hzgzmUEY/r1.Uo.gJTZrOhPT2"
+    },
+    {
+        "username": "test1",
+        "hashed_password": "$2b$12$8ja7Niymzz/3kBfg6yRuD.IXRyTKvXk2Iow1XTkwcg7KR.sO7kiNu"
+    }
+]

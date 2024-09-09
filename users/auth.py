@@ -6,7 +6,10 @@ from jose import jwt
 from passlib.context import CryptContext
 
 from config import settings
+from exceptions import UserIsNotPresentException
 from services.user_service import UserService
+from logger_config import logger
+
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -31,6 +34,10 @@ def create_access_token(data: dict) -> str:
 
 async def authenticate_user(username: str, password: str):
     user = await UserService.find_user(username=username)
-    if not user and not verify_password(password, user.password):
-        return None
+    if not user:
+        logger.info(f"User: {username} does not exist")
+        raise UserIsNotPresentException
+    if not verify_password(password, user.hashed_password):
+        logger.info(f"Invalid password for user: {username}")
+        raise UserIsNotPresentException
     return user
