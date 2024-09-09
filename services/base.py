@@ -8,7 +8,6 @@ from exceptions import LinkM2MException
 from logger_config import logger
 
 
-
 class BaseService:
     model = None
 
@@ -50,6 +49,7 @@ class BaseService:
             # Проверяем, является ли ошибка нарушением ограничения внешнего ключа
             if isinstance(e.orig, AsyncAdapt_asyncpg_dbapi.IntegrityError) and 'ForeignKeyViolationError' in str(
                     e.orig):
-                logger.warning("Violation of the rules for using a foreign key, the value is referenced in another table")
+                logger.warning(
+                    "Violation of the rules for using a foreign key, the value is referenced in another table")
                 raise LinkM2MException
         return {"Запись успешно удалена"}

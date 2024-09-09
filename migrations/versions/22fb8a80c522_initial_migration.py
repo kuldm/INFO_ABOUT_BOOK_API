@@ -27,18 +27,18 @@ def upgrade() -> None:
                     sa.PrimaryKeyConstraint('id')
                     )
     op.create_index(op.f('ix_authors_id'), 'authors', ['id'], unique=False)
-    op.create_table('books',
-                    sa.Column('id', sa.Integer(), nullable=False),
-                    sa.Column('name', sa.String(), nullable=False),
-                    sa.PrimaryKeyConstraint('id')
-                    )
-    op.create_index(op.f('ix_books_id'), 'books', ['id'], unique=False)
     op.create_table('tags',
                     sa.Column('id', sa.Integer(), nullable=False),
                     sa.Column('name', sa.String(), nullable=False),
                     sa.PrimaryKeyConstraint('id')
                     )
     op.create_index(op.f('ix_tags_id'), 'tags', ['id'], unique=False)
+    op.create_table('books',
+                    sa.Column('id', sa.Integer(), nullable=False),
+                    sa.Column('name', sa.String(), nullable=False),
+                    sa.PrimaryKeyConstraint('id')
+                    )
+    op.create_index(op.f('ix_books_id'), 'books', ['id'], unique=False)
     op.create_table('book_author',
                     sa.Column('book_id', sa.Integer(), nullable=False),
                     sa.Column('author_id', sa.Integer(), nullable=False),
@@ -60,12 +60,12 @@ def upgrade() -> None:
 
     op.execute(text(sql_script))
 
-    with Path('scripts/books.sql').open('r', encoding='utf-8') as f:
+    with Path('scripts/tags.sql').open('r', encoding='utf-8') as f:
         sql_script = f.read()
 
     op.execute(text(sql_script))
 
-    with Path('scripts/tags.sql').open('r', encoding='utf-8') as f:
+    with Path('scripts/books.sql').open('r', encoding='utf-8') as f:
         sql_script = f.read()
 
     op.execute(text(sql_script))
@@ -87,8 +87,8 @@ def downgrade() -> None:
     op.drop_table('book_author')
     op.drop_index(op.f('ix_tags_id'), table_name='tags')
     op.drop_table('tags')
-    op.drop_index(op.f('ix_books_id'), table_name='books')
-    op.drop_table('books')
     op.drop_index(op.f('ix_authors_id'), table_name='authors')
     op.drop_table('authors')
+    op.drop_index(op.f('ix_books_id'), table_name='books')
+    op.drop_table('books')
     # ### end Alembic commands ###

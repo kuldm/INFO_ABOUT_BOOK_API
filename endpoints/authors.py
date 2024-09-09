@@ -18,7 +18,7 @@ router = APIRouter(
 
 @router.get("",
             response_model=List[AuthorSchema],
-            description="This method returns a list of all authors",
+            description="Этот метод возвращает данные всех авторов",
             )
 async def get_authors(
         auth: bool = Depends(get_current_user),
@@ -32,7 +32,7 @@ async def get_authors(
 
 @router.post("",
              response_model=AuthorShortSchema,
-             description="This method creates a new author",
+             description="Этот метод создаёт нового автора",
              )
 async def create_author(
         author_name: str,
@@ -48,7 +48,7 @@ async def create_author(
 
 @router.get("/{author_id}",
             response_model=AuthorShortSchema,
-            description="This method returns the author's by id",
+            description="Этот метод возвращает данные автора по его ID",
             )
 async def get_author_by_id(
         author_id: int,
@@ -64,7 +64,7 @@ async def get_author_by_id(
 
 @router.put("/{author_id}",
             response_model=AuthorShortSchema,
-            description="This method updates the author's details by id",
+            description="Этот метод обновляет данные автора по его ID",
             )
 async def update_author(
         author_id: int,
@@ -80,7 +80,7 @@ async def update_author(
 
 
 @router.delete("/{author_id}",
-               description="This method deletes the author's by id",
+               description="Этот метод удаляет автора по его ID",
                )
 async def delete_author(
         author_id: int,
@@ -92,4 +92,3 @@ async def delete_author(
     await AuthorService.delete(session, id=author_id)
     logger.info(f"Author ID: {author_id} deleted successfully")
     return OkStatusCode().detail
-

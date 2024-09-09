@@ -1,6 +1,4 @@
 from datetime import datetime, timedelta
-from http.client import HTTPException
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from jose import jwt
 from passlib.context import CryptContext
@@ -9,7 +7,6 @@ from config import settings
 from exceptions import UserIsNotPresentException
 from services.user_service import UserService
 from logger_config import logger
-
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

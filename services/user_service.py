@@ -1,4 +1,3 @@
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, insert, delete
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.dialects.postgresql.asyncpg import AsyncAdapt_asyncpg_dbapi
@@ -29,10 +28,10 @@ class UserService(BaseService):
             return result.mappings().first()
 
     @classmethod
-    async def delete_user(cls, username:str):
+    async def delete_user(cls, username: str):
         async with async_session_maker() as session:
-            existing_book_id = await session.execute(select(cls.model).where(cls.model.username == username))
-            if not existing_book_id.scalar():
+            existing_user_id = await session.execute(select(cls.model).where(cls.model.username == username))
+            if not existing_user_id.scalar():
                 logger.error(f"The user with id: {username} does not exist")
                 raise UserIsNotPresentException
             try:
@@ -44,4 +43,3 @@ class UserService(BaseService):
                 if isinstance(e.orig, AsyncAdapt_asyncpg_dbapi.IntegrityError) and 'ForeignKeyViolationError' in str(
                         e.orig):
                     raise LinkM2MException
-        # return {"Запись успешно удалена"}

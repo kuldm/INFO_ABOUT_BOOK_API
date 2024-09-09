@@ -1,18 +1,20 @@
-"""added users table
+"""Created Users table
 
-Revision ID: 0852df44c23f
+Revision ID: 97e97e320fe8
 Revises: 22fb8a80c522
-Create Date: 2024-09-08 02:31:10.289044
+Create Date: 2024-09-09 17:34:14.949969
 
 """
+from pathlib import Path
 from typing import Sequence, Union
 
 from alembic import op
+from sqlalchemy import text
 import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '0852df44c23f'
+revision: str = '97e97e320fe8'
 down_revision: Union[str, None] = '22fb8a80c522'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -28,6 +30,11 @@ def upgrade() -> None:
     )
     op.create_index(op.f('ix_users_id'), 'users', ['id'], unique=False)
     # ### end Alembic commands ###
+
+    with Path('scripts/users.sql').open('r', encoding='utf-8') as f:
+        sql_script = f.read()
+
+    op.execute(text(sql_script))
 
 
 def downgrade() -> None:

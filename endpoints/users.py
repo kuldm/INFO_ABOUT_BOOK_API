@@ -1,11 +1,10 @@
 from fastapi import APIRouter, Response
-from starlette import status
 
 from exceptions import UserIsNotPresentException, UserAlreadyExistException, OkStatusCode, \
     UserSuccessfullyRegisteredCode, UserLoggedOutCode, SuccessfulLoggingCode
 from schemas.users import UserAuthSchema
 from services.user_service import UserService
-from users.auth import get_password_hash, verify_password, authenticate_user, create_access_token
+from users.auth import get_password_hash, authenticate_user, create_access_token
 from logger_config import logger
 
 router = APIRouter(
@@ -15,7 +14,7 @@ router = APIRouter(
 
 
 @router.post("/register",
-             description="This method registers a new user"
+             description="Этот метод создаёт нового пользователя"
              )
 async def register_user(user_data: UserAuthSchema):
     logger.info(f"Registering user: {user_data.username}")
@@ -30,7 +29,7 @@ async def register_user(user_data: UserAuthSchema):
 
 
 @router.post("/login",
-             description="This method logining the user's",
+             description="Этот метод залогинивает пользователя",
              )
 async def login_user(response: Response, user_data: UserAuthSchema):
     logger.info(f"Logging in user: {user_data.username}")
@@ -45,7 +44,7 @@ async def login_user(response: Response, user_data: UserAuthSchema):
 
 
 @router.post("/logout",
-             description="This method logs out the user's"
+             description="Этот метод разлогинивает пользователя"
              )
 async def logout_user(response: Response):
     logger.info("Logging out user")
@@ -55,7 +54,7 @@ async def logout_user(response: Response):
 
 
 @router.delete("/{username}",
-               description="This method deletes the user's by name",
+               description="Этот метод удаляет пользователя по его имени",
                )
 async def delete_tag(
         username: str,

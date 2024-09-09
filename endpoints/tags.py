@@ -5,7 +5,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from database import get_db
 from exceptions import OkStatusCode
-from models.users import Users
 from schemas.tags import TagSchema, TagShortSchema
 from services.tag_service import TagService
 from users.dependencies import get_current_user
@@ -19,7 +18,7 @@ router = APIRouter(
 
 @router.get("",
             response_model=List[TagSchema],
-            description="This method returns a list of all tags",
+            description="Этот метод возвращает данные всех тэгов",
             )
 async def get_tags(
         auth: bool = Depends(get_current_user),
@@ -33,7 +32,7 @@ async def get_tags(
 
 @router.post("",
              response_model=TagShortSchema,
-             description="This method creates a new tag",
+             description="Этот метод создаёт новый тэг",
              )
 async def create_tag(
         tag: str,
@@ -48,7 +47,7 @@ async def create_tag(
 
 @router.get("/{tag_id}",
             response_model=TagShortSchema,
-            description="This method returns the tag's details by id",
+            description="Этот метод возвращает данные тэга по его ID",
             )
 async def get_tag_by_id(
         tag_id: int,
@@ -63,7 +62,7 @@ async def get_tag_by_id(
 
 @router.put("/{tag_id}",
             response_model=TagShortSchema,
-            description="This method updates the tag's details by id",
+            description="Этот метод обновляет данные тэга по его ID",
             )
 async def update_tag(
         tag_id: int,
@@ -78,7 +77,7 @@ async def update_tag(
 
 
 @router.delete("/{tag_id}",
-               description="This method deletes the tag's by id",
+               description="Этот метод удаляет тэг по его ID",
                )
 async def delete_tag(
         tag_id: int,

@@ -1,8 +1,5 @@
-from datetime import datetime
-
 from fastapi import Request, Depends
 from jose import jwt, JWTError, ExpiredSignatureError
-from sqlalchemy.testing.pickleable import User
 
 from config import settings
 from exceptions import TokenAbsentException, IncorrectTokenFormatException, TokenExpiredException, \

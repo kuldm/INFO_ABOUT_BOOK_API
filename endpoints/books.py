@@ -18,7 +18,7 @@ router = APIRouter(
 
 @router.get("",
             response_model=List[BookSchema],
-            description="This method returns a list of all books",
+            description="Этот метод возвращает данные всех книг, либо данные книг по заданным параметрам",
             )
 async def get_books(
         auth: bool = Depends(get_current_user),
@@ -34,7 +34,7 @@ async def get_books(
 
 @router.post("",
              response_model=BookShortSchema,
-             description="This method creates a new book",
+             description="Этот метод создаёт новую книгу",
              )
 async def create_book(
         name: str,
@@ -52,7 +52,7 @@ async def create_book(
 
 @router.get("/{book_id}",
             response_model=BookSchema,
-            description="This method returns the book's by id",
+            description="Этот метод возвращает данные книги по её ID",
             )
 async def get_book_by_id(
         book_id: int,
@@ -68,7 +68,7 @@ async def get_book_by_id(
 
 @router.put("/{book_id}",
             response_model=BookShortSchema,
-            description="This method updates the book's details by id",
+            description="Этот метод обновляет данные книги по её ID",
             )
 async def update_book(
         book_id: int,
@@ -84,7 +84,7 @@ async def update_book(
 
 
 @router.delete("/{book_id}",
-               description="This method deletes the book's by id",
+               description="Этот метод удаляет книгу по его ID",
                )
 async def delete_book(
         book_id: int,
