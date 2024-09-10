@@ -2,59 +2,25 @@ services:
   db:
     image: postgres:15
     container_name: info_about_book_api_db
-    env_file:
-      - .env-non-dev
     ports:
       - ${DB_PORT}:${DB_PORT}
     environment:
       - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_PASSWORD=${DB_PASS}
       - POSTGRES_DB=${DB_NAME}
-    volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
   book:
     build:
       context: .
     container_name: info_about_book_api
-    env_file:
-      - .env-non-dev
     depends_on:
       - db
-      - elasticsearch
-    environment:
-      DATABASE_URL: postgresql://postgres:postgres@info_about_book_api_db:5432/info_about_book_api
-    command: [ "sh", "-c", "alembic upgrade head && python main.py --bind=0.0.0.0:8000" ]
     ports:
-      - ${PORT_DOCKER}:${PORT}
+      - ${DOCKER_PORT}:${PORT}
     networks:
       - elk_network
 
 
-  elasticsearch:
-    image: elasticsearch:7.10.1
-    container_name: elasticsearch
-    environment:
-      - discovery.type=single-node
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
-    ports:
-      - ${PORT_ELASTICSEARCH}:${PORT_ELASTICSEARCH}
-    volumes:
-      - elasticsearch_data:/usr/share/elasticsearch/data
-    networks:
-      - elk_network
-
-  kibana:
-    image: kibana:7.10.1
-    container_name: kibana
-    ports:
-      - ${PORT_KIBANA}:${PORT_KIBANA}
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    depends_on:
-      - elasticsearch
-    networks:
-      - elk_network
 
 volumes:
   elasticsearch_data:
@@ -65,4 +31,3 @@ volumes:
 networks:
   elk_network:
     external: true
-

@@ -1,4 +1,3 @@
-from loguru import logger
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import BulkIndexError
 from config import settings
@@ -21,6 +20,5 @@ class ElasticsearchHandler:
             print(f"Ошибка при индексации лога в Elasticsearch: {e}")
 
 
-es_handler = ElasticsearchHandler(es_client, "application_logs")
-logger.add(es_handler.write, format="{time} {level} {message}", level="INFO")
+logger = ElasticsearchHandler(es_client, "application_logs")
 # http://localhost:5601 - Kibana

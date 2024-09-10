@@ -1,0 +1,32 @@
+services:
+  elasticsearch:
+    image: elasticsearch:7.10.1
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - ${ELASTICSEARCH_PORT}:${ELASTICSEARCH_PORT}
+    networks:
+      - elk_network
+
+  kibana:
+    image: kibana:7.10.1
+    container_name: kibana
+    ports:
+      - ${KIBANA_PORT}:${KIBANA_PORT}
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk_network
+
+
+volumes:
+  elasticsearch_data:
+
+networks:
+  elk_network:
+    external: true
+    driver: bridge

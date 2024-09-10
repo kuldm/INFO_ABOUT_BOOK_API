@@ -33,9 +33,9 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env")
 
-    PORT_DOCKER: str
-    PORT_ELASTICSEARCH: str
-    PORT_KIBANA: str
+    DOCKER_PORT: int
+    ELASTICSEARCH_PORT: int
+    KIBANA_PORT: int
     ELASTICSEARCH_HOST: str
 
 
