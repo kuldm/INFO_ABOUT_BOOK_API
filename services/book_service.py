@@ -17,6 +17,7 @@ class BookService(BaseService):
 
     @classmethod
     async def find_all_books(cls, session: AsyncSession, author_id: Optional[int] = None, tag_id: Optional[int] = None):
+        """Поиск всех книги с опциональной фильтрацией по автору и тегу."""
         load_options = [selectinload(cls.model.authors), selectinload(cls.model.tags)]
         # Формируем запрос
         query = select(cls.model)
@@ -37,10 +38,12 @@ class BookService(BaseService):
 
     @classmethod
     async def add_book(cls, session: AsyncSession, name: str, authors: List[str], tags: List[str]):
-        # Проверка на наличие авторов и тегов
+        """Добавление новой книги с указанными авторами и тегами."""
+        # Проверка на наличие авторов
         if not authors:
             logger.error("No authors provided for the book")
             raise AuthorsMissingException
+        # Проверка на наличие тегов
         if not tags:
             logger.error("No tags provided for the book")
             raise TagsMissingException
@@ -84,6 +87,7 @@ class BookService(BaseService):
 
     @classmethod
     async def update_book(cls, session: AsyncSession, book_id: int, name: str):
+        """Обновляет название книги по ID."""
         # Проверка существования книги
         book = await session.execute(select(Book).where(Book.id == book_id))
         book = book.scalar()
@@ -104,6 +108,7 @@ class BookService(BaseService):
 
     @classmethod
     async def delete_book(cls, session: AsyncSession, book_id: int):
+        """Удаляет книгу по ID."""
         # Поиск книги
         book = await session.execute(select(Book).where(Book.id == book_id))
         book = book.scalar()
@@ -119,15 +124,20 @@ class BookService(BaseService):
 
     @classmethod
     async def find_one_or_none_book(cls, session: AsyncSession, id: int):
+        """Находит одну книгу по ID с подгрузкой авторов и тегов."""
         load_options = [selectinload(cls.model.authors), selectinload(cls.model.tags)]
         # Проверка существования книги по имени
         existing_book_id = await session.execute(select(cls.model).where(cls.model.id == id))
+
         if not existing_book_id.scalar():
             logger.warning(f"Book with ID: {id} not found")
             raise BookAbsentException
+
         query = select(cls.model).filter(cls.model.id == id)
+
         if load_options:
             for option in load_options:
                 query = query.options(option)
+
         result = await session.execute(query)
         return result.scalars().first()

@@ -12,14 +12,17 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def get_password_hash(password: str) -> str:
+    """Хэширование пароля."""
     return pwd_context.hash(password)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """Проверка соответствия пароля и хэша."""
     return pwd_context.verify(plain_password, hashed_password)
 
 
 def create_access_token(data: dict) -> str:
+    """Создание JWT токена с данными и временем истечения."""
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(minutes=60)
     to_encode.update({"exp": expire})
@@ -30,6 +33,7 @@ def create_access_token(data: dict) -> str:
 
 
 async def authenticate_user(username: str, password: str):
+    """Аутентификация пользователя по имени и паролю."""
     user = await UserService.find_user(username=username)
     if not user:
         logger.info(f"User: {username} does not exist")

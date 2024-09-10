@@ -14,6 +14,7 @@ class UserService(BaseService):
 
     @classmethod
     async def find_user(cls, **filter_by):
+        """Поиск пользователя по заданным фильтрам."""
         async with async_session_maker() as session:
             query = select(cls.model.__table__.columns).filter_by(**filter_by)
             result = await session.execute(query)
@@ -21,6 +22,7 @@ class UserService(BaseService):
 
     @classmethod
     async def add_user(cls, **data):
+        """Добавление нового пользователя."""
         async with async_session_maker() as session:
             query = insert(cls.model).values(**data).returning(cls.model.id, cls.model.username)
             result = await session.execute(query)
@@ -29,6 +31,7 @@ class UserService(BaseService):
 
     @classmethod
     async def delete_user(cls, username: str):
+        """Удаление пользователя по имени пользователя, если он существует."""
         async with async_session_maker() as session:
             existing_user_id = await session.execute(select(cls.model).where(cls.model.username == username))
             if not existing_user_id.scalar():
