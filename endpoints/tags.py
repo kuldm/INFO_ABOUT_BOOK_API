@@ -8,11 +8,12 @@ from exceptions import OkStatusCode
 from schemas.tags import TagSchema, TagShortSchema
 from services.tag_service import TagService
 from users.dependencies import get_current_user
-from logger_config import logger
+from utils.wrapers import log_request
 
 router = APIRouter(
     prefix="/tags",
     tags=["Тэги"],
+    dependencies=[Depends(get_current_user)],
 )
 
 
@@ -20,71 +21,57 @@ router = APIRouter(
             response_model=List[TagSchema],
             description="Этот метод возвращает данные всех тэгов",
             )
+@log_request
 async def get_tags(
-        auth: bool = Depends(get_current_user),
         session: AsyncSession = Depends(get_db),
 ):
-    logger.info("Fetching all tags")
-    tags = await TagService.find_all(session)
-    logger.info(f"Found {len(tags)} tags")
-    return tags
+    return await TagService.find_all(session)
 
 
 @router.post("",
              response_model=TagShortSchema,
              description="Этот метод создаёт новый тэг",
              )
+@log_request
 async def create_tag(
         tag: str,
-        auth: bool = Depends(get_current_user),
         session: AsyncSession = Depends(get_db),
 ):
-    logger.info(f"Creating new tag: {tag}")
-    new_tag = await TagService.add(session, name=tag)
-    logger.info(f"Tag: {tag} created successfully with ID {new_tag.id}")
-    return new_tag
+    return await TagService.add(session, name=tag)
 
 
 @router.get("/{tag_id}",
             response_model=TagShortSchema,
             description="Этот метод возвращает данные тэга по его ID",
             )
+@log_request
 async def get_tag_by_id(
         tag_id: int,
-        auth: bool = Depends(get_current_user),
         session: AsyncSession = Depends(get_db),
 ):
-    logger.info(f"Fetching tag by ID: {tag_id}")
-    tag = await TagService.find_one_or_none(session, id=tag_id)
-    logger.info(f"Tag found: {tag.name}")
-    return tag
+    return await TagService.find_one_or_none(session, id=tag_id)
 
 
 @router.put("/{tag_id}",
             response_model=TagShortSchema,
             description="Этот метод обновляет данные тэга по его ID",
             )
+@log_request
 async def update_tag(
         tag_id: int,
         name: str,
-        auth: bool = Depends(get_current_user),
         session: AsyncSession = Depends(get_db),
 ):
-    logger.info(f"Updating tag ID: {tag_id} with new name: {name}")
-    updated_tag = await TagService.update(session, id=tag_id, name=name)
-    logger.info(f"Tag ID: {tag_id} updated successfully")
-    return updated_tag
+    return await TagService.update(session, id=tag_id, name=name)
 
 
 @router.delete("/{tag_id}",
                description="Этот метод удаляет тэг по его ID",
                )
+@log_request
 async def delete_tag(
         tag_id: int,
-        auth: bool = Depends(get_current_user),
         session: AsyncSession = Depends(get_db),
 ):
-    logger.info(f"Deleting tag with ID: {tag_id}")
     await TagService.delete(session, id=tag_id)
-    logger.info(f"Tag ID: {tag_id} deleted successfully")
     return OkStatusCode().detail
