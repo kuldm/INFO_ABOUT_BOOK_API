@@ -43,42 +43,14 @@ cd INFO_ABOUT_BOOK_API
 
 Для `.env`:
 ```
-echo 
-MODE=DEV
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=your_user
-DB_PASS=your_password
-DB_NAME=info_about_book_api
-TEST_DB_HOST=localhost
-TEST_DB_PORT=5432
-TEST_DB_USER=your_user
-TEST_DB_PASS=your_password
-TEST_DB_NAME=test_info_about_book_api
-SECRET_KEY=pYVbNH23969EfjVrg69d++GgdZmCoc6aKaxFIQf3rh8=
-ALGORITHM=HS256
-HOST=0.0.0.0
-PORT=8000 > .env
+echo MODE=DEV DB_HOST=localhost DB_PORT=5432 DB_USER=your_user DB_PASS=your_password DB_NAME=info_about_book_api TEST_DB_HOST=localhost TEST_DB_PORT=5432 TEST_DB_USER=your_user TEST_DB_PASS=your_password TEST_DB_NAME=test_info_about_book_api SECRET_KEY=pYVbNH23969EfjVrg69d++GgdZmCoc6aKaxFIQf3rh8= ALGORITHM=HS256 HOST=0.0.0.0 PORT=8000 > .env
 ```
 
 Для `.env-non-dev`:
 
 
 ```
-echo 
-MODE=DEV
-DB_HOST=db
-DB_PORT=5432
-DB_USER=your_user
-DB_PASS=your_password
-DB_NAME=info_about_book_api
-POSTGRES_USER=info_about_book_api
-POSTGRES_USER=your_user
-POSTGRES_PASSWORD=your_password
-SECRET_KEY=pYVbNH23969EfjVrg69d++GgdZmCoc6aKaxFIQf3rh8=
-ALGORITHM=HS256
-HOST=0.0.0.0
-PORT=8000 > .env-non-dev
+echo MODE=DEV DB_HOST=db DB_PORT=5432 DB_USER=your_user DB_PASS=your_password DB_NAME=info_about_book_api POSTGRES_USER=info_about_book_api POSTGRES_USER=your_user POSTGRES_PASSWORD=your_password SECRET_KEY=pYVbNH23969EfjVrg69d++GgdZmCoc6aKaxFIQf3rh8= ALGORITHM=HS256 HOST=0.0.0.0 PORT=8000 > .env-non-dev
 ```
 
 ### 3. Сборка и запуск контейнеров

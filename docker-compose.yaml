@@ -5,7 +5,11 @@ services:
     env_file:
       - .env-non-dev
     ports:
-      - 5432:5432
+      - ${DB_PORT}:${DB_PORT}
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
@@ -18,9 +22,11 @@ services:
     depends_on:
       - db
       - elasticsearch
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@info_about_book_api_db:5432/info_about_book_api
     command: [ "sh", "-c", "alembic upgrade head && python main.py --bind=0.0.0.0:8000" ]
     ports:
-      - 7777:8000
+      - ${PORT_DOCKER}:${PORT}
     networks:
       - elk_network
 
@@ -32,7 +38,7 @@ services:
       - discovery.type=single-node
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
     ports:
-      - "9200:9200"
+      - ${PORT_ELASTICSEARCH}:${PORT_ELASTICSEARCH}
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
     networks:
@@ -42,7 +48,7 @@ services:
     image: kibana:7.10.1
     container_name: kibana
     ports:
-      - "5601:5601"
+      - ${PORT_KIBANA}:${PORT_KIBANA}
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     depends_on:
@@ -52,6 +58,9 @@ services:
 
 volumes:
   elasticsearch_data:
+  postgres_data:
+
+
 
 networks:
   elk_network:
