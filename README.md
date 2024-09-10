@@ -84,24 +84,34 @@ PORT=8000 > .env-non-dev
 ### 3. Сборка и запуск контейнеров
 Для сборки и запуска всех контейнеров выполните следующие команды:
 
-```docker compose build```
+```
+docker compose build
+```
 и
-```docker compose up```
+```
+docker compose up
+```
 
 
 ### 4. Проверка работы API
 
 После успешного запуска контейнеров, API будет доступен по адресу: 
-`http://localhost:7777`
+```
+http://localhost:7777
+```
 
 Документация Swagger будет доступна по адресу:
-`http://localhost:7777/docs`
+```
+http://localhost:7777/docs
+```
 
 ### 5. Остановка контейнеров
 
 Чтобы остановить и удалить контейнеры, выполните команду:
 
-```docker compose down```
+```
+docker compose down
+```
 
 ## API эндпоинты
 ### Авторизация
