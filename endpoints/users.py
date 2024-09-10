@@ -17,7 +17,8 @@ router = APIRouter(
              )
 @log_users_request
 async def register_user(user_data: UserAuthSchema):
-    return await RegistrationAndLoginService.register_user(username=user_data.username, password=user_data.password)
+    return await RegistrationAndLoginService.register_user(username=user_data.username,
+                                                           password=user_data.password.get_secret_value())
 
 
 @router.post("/login",
@@ -26,7 +27,7 @@ async def register_user(user_data: UserAuthSchema):
 @log_users_request
 async def login_user(response: Response, user_data: UserAuthSchema):
     return await RegistrationAndLoginService.login_user(
-        response, username=user_data.username, password=user_data.password)
+        response, username=user_data.username, password=user_data.password.get_secret_value())
 
 
 @router.post("/logout",

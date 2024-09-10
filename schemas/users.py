@@ -1,6 +1,6 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, SecretStr
 
 
 class UserAuthSchema(BaseModel):
     username: str
-    password: str
+    password: SecretStr

@@ -34,9 +34,17 @@ def log_request(func):
 def log_users_request(func):
     @functools.wraps(func)
     async def wrapper(*args, **kwargs):
-        logger.info(f"Executing {func.__name__} with {kwargs}")
+        if kwargs:
+            kwargs_to_log = dict(list(kwargs.items())[:1])
+        else:
+            kwargs_to_log = kwargs
+        logger.info(f"Executing {func.__name__} with {kwargs_to_log}")
         result = await func(*args, **kwargs)
-        logger.info(f"{func.__name__} executed successfully with {kwargs}")
+        logger.info(f"{func.__name__} executed successfully with {kwargs_to_log}")
         return result
 
     return wrapper
+
+
+a = {1: 1, 2: 2, 3: 3}
+print(dict(list(a.items())[:1]))
