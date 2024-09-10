@@ -44,7 +44,3 @@ def log_users_request(func):
         return result
 
     return wrapper
-
-
-a = {1: 1, 2: 2, 3: 3}
-print(dict(list(a.items())[:1]))
