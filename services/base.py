@@ -10,6 +10,7 @@ from logger_config import logger
 
 class BaseService:
     model = None
+    es_index = None
 
     @classmethod
     async def find_all(cls, session: AsyncSession, **filter_by):

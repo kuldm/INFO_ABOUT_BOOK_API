@@ -10,10 +10,12 @@ from models.books import Book
 from models.tags import Tag
 from services.base import BaseService
 from logger_config import logger
+from utils.elasticsearch_utils import index_document, search, delete_document
 
 
 class BookService(BaseService):
     model = Book
+    es_index = 'books'
 
     @classmethod
     async def find_all_books(cls, session: AsyncSession, author_id: Optional[int] = None, tag_id: Optional[int] = None):
@@ -79,6 +81,12 @@ class BookService(BaseService):
         new_book.authors = author_objects
         new_book.tags = tags_objects
 
+        index_document(cls.es_index, 'book', new_book.id, {
+            'name': new_book.name,
+            'authors': [author.name for author in author_objects],
+            'tags': [tag.name for tag in tags_objects]
+        })
+
         session.add(new_book)
         await session.commit()
         await session.refresh(new_book)
@@ -101,6 +109,10 @@ class BookService(BaseService):
             raise BookAlreadyExistException
         book.name = name
 
+        index_document(cls.es_index, 'book', book.id, {
+            'name': book.name,
+        })
+
         await session.commit()
         await session.refresh(book)
 
@@ -116,6 +128,8 @@ class BookService(BaseService):
         if not book:
             logger.warning(f"Book with ID {book_id} not found")
             raise BookAbsentException
+
+        delete_document(cls.es_index, 'book', book_id)
 
         await session.delete(book)
         await session.commit()
@@ -141,3 +155,8 @@ class BookService(BaseService):
 
         result = await session.execute(query)
         return result.scalars().first()
+
+    @classmethod
+    async def search_books(cls, query: str):
+        """Поиск книг в Elasticsearch."""
+        return search(cls.es_index, query)

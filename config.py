@@ -33,5 +33,7 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env")
 
+    ELASTICSEARCH_HOST: str
+
 
 settings = Settings()

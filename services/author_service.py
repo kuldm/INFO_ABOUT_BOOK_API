@@ -5,10 +5,12 @@ from exceptions import AuthorAlreadyExistException, AuthorAbsentException
 from models.authors import Author
 from services.base import BaseService
 from logger_config import logger
+from utils.elasticsearch_utils import index_document, search, delete_document
 
 
 class AuthorService(BaseService):
     model = Author
+    es_index = 'tags'
 
     @classmethod
     async def existing_author_id(cls, session: AsyncSession, id: int):
@@ -36,7 +38,9 @@ class AuthorService(BaseService):
         if await cls.existing_author_name(session, name):
             logger.warning(f"Author with name: '{name}' already exists")
             raise AuthorAlreadyExistException
-        return await super().add(session, name=name)
+        author = await super().add(session, name=name)
+        index_document(cls.es_index, 'tag', author['id'], {'name': author['name']})
+        return author
 
     @classmethod
     async def update(cls, session: AsyncSession, id: int, name: str):
@@ -47,7 +51,9 @@ class AuthorService(BaseService):
         if await cls.existing_author_name(session, name):
             logger.warning(f"Author with name: '{name}' already exists")
             raise AuthorAlreadyExistException
-        return await super().update(session, id=id, name=name)
+        author = await super().update(session, id=id, name=name)
+        index_document(cls.es_index, 'tag', author['id'], {'name': author['name']})
+        return author
 
     @classmethod
     async def delete(cls, session: AsyncSession, id: int):
@@ -55,4 +61,11 @@ class AuthorService(BaseService):
         if not await cls.existing_author_id(session, id):
             logger.warning(f"Author with ID: {id} not found")
             raise AuthorAbsentException
-        return await super().delete(session, id=id)
+        result = await super().delete(session, id=id)
+        delete_document(cls.es_index, 'author', id)
+        return result
+
+    @classmethod
+    async def search_authors(cls, query: str):
+        """Поиск авторов в Elasticsearch."""
+        return search(cls.es_index, query)

@@ -5,10 +5,12 @@ from exceptions import TagAlreadyExistException, TagAbsentException
 from models.tags import Tag
 from services.base import BaseService
 from logger_config import logger
+from utils.elasticsearch_utils import index_document, search, delete_document
 
 
 class TagService(BaseService):
     model = Tag
+    es_index = 'tags'
 
     @classmethod
     async def existing_tag_id(cls, session: AsyncSession, id: int):
@@ -36,7 +38,9 @@ class TagService(BaseService):
         if await cls.existing_tag_name(session, name):
             logger.warning(f"Tag with name '{name}' already exists")
             raise TagAlreadyExistException
-        return await super().add(session, name=name)
+        tag = await super().add(session, name=name)
+        index_document(cls.es_index, 'tag', tag['id'], {'name': tag['name']})
+        return tag
 
     @classmethod
     async def update(cls, session: AsyncSession, id: int, name: str):
@@ -47,7 +51,9 @@ class TagService(BaseService):
         if await cls.existing_tag_name(session, name):
             logger.warning(f"Tag with name: '{name}' already exists")
             raise TagAlreadyExistException
-        return await super().update(session, id=id, name=name)
+        tag = await super().update(session, id=id, name=name)
+        index_document(cls.es_index, 'tag', tag['id'], {'name': tag['name']})
+        return tag
 
     @classmethod
     async def delete(cls, session: AsyncSession, id: int):
@@ -55,4 +61,11 @@ class TagService(BaseService):
         if not await cls.existing_tag_id(session, id):
             logger.warning(f"Tag with ID: {id} not found")
             raise TagAbsentException
-        return await super().delete(session, id=id)
+        result = await super().delete(session, id=id)
+        delete_document(cls.es_index, 'tag', id)
+        return result
+
+    @classmethod
+    async def search_tags(cls, query: str):
+        """Поиск тегов в Elasticsearch."""
+        return search(cls.es_index, query)

@@ -17,6 +17,43 @@ services:
       - .env-non-dev
     depends_on:
       - db
-    command: ["sh", "-c", "alembic upgrade head && python main.py --bind=0.0.0.0:8000"]
+      - elasticsearch
+    command: [ "sh", "-c", "alembic upgrade head && python main.py --bind=0.0.0.0:8000" ]
     ports:
       - 7777:8000
+    networks:
+      - elk_network
+
+
+  elasticsearch:
+    image: elasticsearch:7.10.1
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - elk_network
+
+  kibana:
+    image: kibana:7.10.1
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk_network
+
+volumes:
+  elasticsearch_data:
+
+networks:
+  elk_network:
+    external: true
+
