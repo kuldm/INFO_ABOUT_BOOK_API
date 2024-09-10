@@ -2,7 +2,7 @@ from fastapi import APIRouter, Response
 
 from exceptions import OkStatusCode, UserLoggedOutCode
 from schemas.users import UserAuthSchema
-from services.registration_and_logging_service import RegistrationAndLoginService
+from services.registration_and_login_service import RegistrationAndLoginService
 from services.user_service import UserService
 from utils.wrapers import log_users_request
 
