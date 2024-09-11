@@ -3,18 +3,20 @@ logging.metrics.enabled: false
 xpack.security.enabled: false
 xpack.monitoring.enabled: false
 setup.ilm.enabled: false
-setup.template.enabled: false
+setup.template.enabled: true
+setup.template.name: "fastapi-app"
+setup.template.pattern: "fastapi-app-*"
 
 filebeat.inputs:
-- type: log
-  scan_frequency: 1s
-  enabled: true
-  paths:
-    - /src/logs/fastapi.log
-  fields:
-    - service: fastapi-app
-  fields_under_root: true
+  - type: log
+    scan_frequency: 1s
+    enabled: true
+    paths:
+      - /src/logs/fastapi-efk.log
+    fields_under_root: true
 
 output.elasticsearch:
-  hosts: ["elasticsearch:9200"]
-  index: "fastapi-app"
+  hosts: ["http://elasticsearch:9200"]
+  index: "fastapi-app-%{[agent.version]}"
+
+logging.level: info
