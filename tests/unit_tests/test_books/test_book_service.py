@@ -1,7 +1,7 @@
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from exceptions import BookAbsentException
+from exceptions.exceptions import BookAbsentException
 from services.book_service import BookService
 
 

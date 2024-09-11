@@ -1,7 +1,7 @@
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from exceptions import TagAbsentException, TagAlreadyExistException, LinkM2MException
+from exceptions.exceptions import TagAbsentException, TagAlreadyExistException, LinkM2MException
 from services.tag_service import TagService
 
 

@@ -1,9 +1,7 @@
-import logging
-
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from exceptions import AuthorAlreadyExistException, AuthorAbsentException
+from exceptions.exceptions import AuthorAlreadyExistException, AuthorAbsentException
 from models.authors import Author
 from services.base import BaseService
 

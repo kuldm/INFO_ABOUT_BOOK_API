@@ -1,8 +1,6 @@
-import logging
-
 from fastapi import Response
 
-from exceptions import UserIsNotPresentException, UserAlreadyExistException, UserSuccessfullyRegisteredCode, \
+from exceptions.exceptions import UserIsNotPresentException, UserAlreadyExistException, UserSuccessfullyRegisteredCode, \
     SuccessfulLoggingCode
 
 from services.base import BaseService

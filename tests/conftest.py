@@ -4,11 +4,10 @@ import json
 import pytest
 from sqlalchemy import insert, text
 
-from fastapi.testclient import TestClient
 from httpx import AsyncClient
 
 from config import settings
-from database import Base, async_session_maker, engine
+from db.database import Base, async_session_maker, engine
 
 from models.tags import Tag
 from models.authors import Author

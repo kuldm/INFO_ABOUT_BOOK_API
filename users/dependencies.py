@@ -1,10 +1,8 @@
-import logging
-
 from fastapi import Request, Depends
 from jose import jwt, JWTError, ExpiredSignatureError
 
 from config import settings
-from exceptions import TokenAbsentException, IncorrectTokenFormatException, TokenExpiredException, \
+from exceptions.exceptions import TokenAbsentException, IncorrectTokenFormatException, TokenExpiredException, \
     UserIsNotPresentException
 from services.user_service import UserService
 

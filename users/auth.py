@@ -1,11 +1,10 @@
-import logging
 from datetime import datetime, timedelta
 
 from jose import jwt
 from passlib.context import CryptContext
 
 from config import settings
-from exceptions import UserIsNotPresentException
+from exceptions.exceptions import UserIsNotPresentException
 from services.user_service import UserService
 
 from logger_config import logger

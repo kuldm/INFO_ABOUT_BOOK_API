@@ -3,8 +3,8 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database import get_db
-from exceptions import OkStatusCode
+from db.database import get_db
+from exceptions.exceptions import OkStatusCode
 from schemas.books import BookSchema, BookShortSchema
 from services.book_service import BookService
 from users.dependencies import get_current_user

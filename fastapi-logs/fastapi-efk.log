@@ -6,3 +6,24 @@
 2024-09-11T18:56:03.557991+0300 WARNING Book with ID: 24 not found
 2024-09-11T18:56:06.915144+0300 INFO Executing get_book_by_id with kwargs: {'book_id': 10}
 2024-09-11T18:56:06.916142+0300 WARNING Book with ID: 10 not found
+2024-09-12T00:52:05.182804+0300 INFO Executing register_user with {'user_data': UserAuthSchema(username='Dima', password=SecretStr('**********'))}
+2024-09-12T00:52:05.769661+0300 INFO register_user executed successfully with {'user_data': UserAuthSchema(username='Dima', password=SecretStr('**********'))}
+2024-09-12T00:52:05.774658+0300 INFO Executing register_user with {'user_data': UserAuthSchema(username='test', password=SecretStr('**********'))}
+2024-09-12T00:52:05.861895+0300 WARNING User test already exists
+2024-09-12T00:52:05.866897+0300 INFO Executing register_user with {'user_data': UserAuthSchema(username='Transformer', password=SecretStr('**********'))}
+2024-09-12T00:52:06.326788+0300 INFO register_user executed successfully with {'user_data': UserAuthSchema(username='Transformer', password=SecretStr('**********'))}
+2024-09-12T00:52:06.329788+0300 INFO Executing login_user with {'user_data': UserAuthSchema(username='test', password=SecretStr('**********'))}
+2024-09-12T00:52:06.735234+0300 INFO login_user executed successfully with {'user_data': UserAuthSchema(username='test', password=SecretStr('**********'))}
+2024-09-12T00:52:06.739237+0300 INFO Executing login_user with {'user_data': UserAuthSchema(username='test1', password=SecretStr('**********'))}
+2024-09-12T00:52:07.038433+0300 INFO login_user executed successfully with {'user_data': UserAuthSchema(username='test1', password=SecretStr('**********'))}
+2024-09-12T00:52:07.041444+0300 INFO Executing login_user with {'user_data': UserAuthSchema(username='test2', password=SecretStr('**********'))}
+2024-09-12T00:52:07.116133+0300 INFO User: test2 does not exist
+2024-09-12T00:52:07.120133+0300 INFO Executing login_user with {'user_data': UserAuthSchema(username='test5', password=SecretStr('**********'))}
+2024-09-12T00:52:07.200533+0300 INFO User: test5 does not exist
+2024-09-12T00:52:07.292890+0300 WARNING Author with ID: 33 not found
+2024-09-12T00:52:07.297884+0300 WARNING Author with name: 'Дарья Донцов' already exists
+2024-09-12T00:52:07.429515+0300 WARNING Book with ID: 110 not found
+2024-09-12T00:52:07.437510+0300 WARNING Tag with ID: 110 not found
+2024-09-12T00:52:07.441513+0300 WARNING Tag with name 'Бестселлер' already exists
+2024-09-12T00:52:07.532149+0300 WARNING Tag with ID: 100 not found
+2024-09-12T00:52:07.546461+0300 WARNING Violation of the rules for using a foreign key, the value is referenced in another table

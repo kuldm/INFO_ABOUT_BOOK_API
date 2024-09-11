@@ -1,7 +1,7 @@
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from exceptions import AuthorAbsentException, AuthorAlreadyExistException
+from exceptions.exceptions import AuthorAbsentException, AuthorAlreadyExistException
 
 from services.author_service import AuthorService
 

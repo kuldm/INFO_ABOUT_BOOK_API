@@ -1,9 +1,7 @@
-import logging
-
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from exceptions import TagAlreadyExistException, TagAbsentException
+from exceptions.exceptions import TagAlreadyExistException, TagAbsentException
 from models.tags import Tag
 from services.base import BaseService
 

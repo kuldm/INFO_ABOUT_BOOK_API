@@ -1,11 +1,9 @@
-import logging
-
 from sqlalchemy import select, insert, delete
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.dialects.postgresql.asyncpg import AsyncAdapt_asyncpg_dbapi
 
-from database import async_session_maker
-from exceptions import LinkM2MException, UserIsNotPresentException
+from db.database import async_session_maker
+from exceptions.exceptions import LinkM2MException, UserIsNotPresentException
 from models.users import Users
 from services.base import BaseService
 

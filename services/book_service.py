@@ -1,10 +1,9 @@
-import logging
 from typing import List, Optional
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from exceptions import BookAbsentException, BookAlreadyExistException, AuthorsMissingException, TagsMissingException, \
+from exceptions.exceptions import BookAbsentException, BookAlreadyExistException, AuthorsMissingException, TagsMissingException, \
     AuthorAbsentException, TagAbsentException
 from models.authors import Author
 from models.books import Book

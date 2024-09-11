@@ -1,12 +1,10 @@
-import logging
-
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from sqlalchemy import select, insert, delete, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.dialects.postgresql.asyncpg import AsyncAdapt_asyncpg_dbapi
 
-from exceptions import LinkM2MException
+from exceptions.exceptions import LinkM2MException
 
 from logger_config import logger
 
