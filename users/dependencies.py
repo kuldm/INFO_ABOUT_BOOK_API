@@ -8,7 +8,7 @@ from exceptions import TokenAbsentException, IncorrectTokenFormatException, Toke
     UserIsNotPresentException
 from services.user_service import UserService
 
-logger = logging.getLogger(__name__)
+from logger_config import logger
 
 
 def get_token(request: Request):

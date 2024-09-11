@@ -2,7 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 import logging
 
-from logger_config import LoggerSetup
+from logger_config import logger
 
 from config import settings
 
@@ -10,10 +10,6 @@ from endpoints.authors import router as authors_router
 from endpoints.books import router as books_router
 from endpoints.tags import router as tags_router
 from endpoints.users import router as users_router
-
-logger_setup = LoggerSetup()
-
-logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="Book API",

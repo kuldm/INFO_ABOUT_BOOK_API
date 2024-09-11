@@ -7,7 +7,8 @@ from exceptions import AuthorAlreadyExistException, AuthorAbsentException
 from models.authors import Author
 from services.base import BaseService
 
-logger = logging.getLogger(__name__)
+from logger_config import logger
+
 
 
 class AuthorService(BaseService):

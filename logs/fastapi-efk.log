@@ -53,3 +53,4 @@ AttributeError: module 'bcrypt' has no attribute '__about__'
 2024-09-11 17:40:17,332 - utils.wrapers - INFO - delete_user executed successfully with {'username': 'test5'}
 2024-09-11 17:40:20,268 - utils.wrapers - INFO - Executing delete_user with {'username': 'test6'}
 2024-09-11 17:40:20,272 - utils.wrapers - INFO - delete_user executed successfully with {'username': 'test6'}
+2024-09-11 18:45:34,384 - __main__ - INFO - --- Starting up application ---

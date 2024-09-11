@@ -9,7 +9,7 @@ from services.base import BaseService
 from services.user_service import UserService
 from users.auth import get_password_hash, authenticate_user, create_access_token
 
-logger = logging.getLogger(__name__)
+from logger_config import logger
 
 
 class RegistrationAndLoginService(BaseService):

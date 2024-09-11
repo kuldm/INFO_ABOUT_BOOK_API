@@ -8,7 +8,7 @@ from sqlalchemy.dialects.postgresql.asyncpg import AsyncAdapt_asyncpg_dbapi
 
 from exceptions import LinkM2MException
 
-logger = logging.getLogger(__name__)
+from logger_config import logger
 
 
 class BaseService:

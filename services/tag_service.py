@@ -7,7 +7,7 @@ from exceptions import TagAlreadyExistException, TagAbsentException
 from models.tags import Tag
 from services.base import BaseService
 
-logger = logging.getLogger(__name__)
+from logger_config import logger
 
 
 class TagService(BaseService):

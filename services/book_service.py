@@ -11,7 +11,7 @@ from models.books import Book
 from models.tags import Tag
 from services.base import BaseService
 
-logger = logging.getLogger(__name__)
+from logger_config import logger
 
 
 class BookService(BaseService):

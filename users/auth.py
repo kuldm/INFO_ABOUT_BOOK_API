@@ -8,7 +8,7 @@ from config import settings
 from exceptions import UserIsNotPresentException
 from services.user_service import UserService
 
-logger = logging.getLogger(__name__)
+from logger_config import logger
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

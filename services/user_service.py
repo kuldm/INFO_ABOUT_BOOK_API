@@ -9,7 +9,7 @@ from exceptions import LinkM2MException, UserIsNotPresentException
 from models.users import Users
 from services.base import BaseService
 
-logger = logging.getLogger(__name__)
+from logger_config import logger
 
 
 class UserService(BaseService):

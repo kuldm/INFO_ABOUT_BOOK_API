@@ -59,3 +59,5 @@ services:
 volumes:
   elasticsearch_data:
     driver: local
+  kibana:
+  filebeat:
