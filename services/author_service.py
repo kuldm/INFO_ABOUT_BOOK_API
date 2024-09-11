@@ -1,10 +1,13 @@
+import logging
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from exceptions import AuthorAlreadyExistException, AuthorAbsentException
 from models.authors import Author
 from services.base import BaseService
-from logger_config import logger
+
+logger = logging.getLogger(__name__)
 
 
 class AuthorService(BaseService):

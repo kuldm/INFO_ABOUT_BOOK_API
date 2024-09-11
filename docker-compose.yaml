@@ -5,7 +5,7 @@ services:
     env_file:
       - .env-non-dev
     ports:
-      - 5432:5432
+      - 5431:5431
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
@@ -17,6 +17,45 @@ services:
       - .env-non-dev
     depends_on:
       - db
-    command: ["sh", "-c", "alembic upgrade head && python main.py --bind=0.0.0.0:8000"]
+      - elasticsearch
+    command: [ "sh", "-c", "alembic upgrade head && python main.py --bind=0.0.0.0:8000" ]
     ports:
       - 7777:8000
+    volumes:
+      - ./fastapi-logs:/app/logs
+
+  elasticsearch:
+    image: elasticsearch:7.10.1
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+
+
+  filebeat:
+    build:
+      context: ./filebeat
+    container_name: filebeat
+    volumes:
+      - ./fastapi-logs:/src/logs
+    depends_on:
+      - elasticsearch
+      - kibana
+
+
+  kibana:
+    image: kibana:7.10.1
+    container_name: kibana
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+    volumes:
+      - ./fastapi-logs:/src/logs
+
+volumes:
+  elasticsearch_data:
+    driver: local

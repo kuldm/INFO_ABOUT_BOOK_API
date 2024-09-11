@@ -1,5 +1,7 @@
 import functools
-from logger_config import logger
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def log_request(func):

@@ -31,6 +31,14 @@ class Settings(BaseSettings):
     SECRET_KEY: str
     ALGORITHM: str
 
+    # POSTGRES_USER: str
+    # POSTGRES_PASSWORD: str
+    # POSTGRES_DB: str
+    #
+    # DOCKER_PORT: int
+    # ELASTICSEARCH_PORT: int
+    # KIBANA_PORT: int
+
     model_config = SettingsConfigDict(env_file=".env")
 
 

@@ -1,12 +1,15 @@
+import logging
+
 from fastapi import Response
 
 from exceptions import UserIsNotPresentException, UserAlreadyExistException, UserSuccessfullyRegisteredCode, \
     SuccessfulLoggingCode
 
-from logger_config import logger
 from services.base import BaseService
 from services.user_service import UserService
 from users.auth import get_password_hash, authenticate_user, create_access_token
+
+logger = logging.getLogger(__name__)
 
 
 class RegistrationAndLoginService(BaseService):

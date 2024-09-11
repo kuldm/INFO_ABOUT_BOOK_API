@@ -1,3 +1,4 @@
+import logging
 from typing import List, Optional
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,7 +10,8 @@ from models.authors import Author
 from models.books import Book
 from models.tags import Tag
 from services.base import BaseService
-from logger_config import logger
+
+logger = logging.getLogger(__name__)
 
 
 class BookService(BaseService):

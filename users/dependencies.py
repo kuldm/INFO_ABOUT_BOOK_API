@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import Request, Depends
 from jose import jwt, JWTError, ExpiredSignatureError
 
@@ -5,7 +7,8 @@ from config import settings
 from exceptions import TokenAbsentException, IncorrectTokenFormatException, TokenExpiredException, \
     UserIsNotPresentException
 from services.user_service import UserService
-from logger_config import logger
+
+logger = logging.getLogger(__name__)
 
 
 def get_token(request: Request):
